@@ -44,14 +44,35 @@ def pad(x,y):
         y = ['0'] + y
     return x,y
 
-def quadratic_multiply(x, y):
-    # this just converts the result from a BinaryNumber to a regular int
-    return _quadratic_multiply(x,y).decimal_val
+  def quadratic_multiply(x, y):
+        # this just converts the result from a BinaryNumber to a regular int
+        return _quadratic_multiply(x, y).decimal_val
 
-def _quadratic_multiply(x, y):
-    ### TODO
-    pass
-    ###
+    def _quadratic_multiply(x, y):
+        x_vec, y_vec = pad(x.binary_vec, y.binary_vec)
+        x_left, x_right = split_number(x_vec)
+        y_left, y_right = split_number(y_vec)
+
+        if (x.decimal_val == 0) or (y.decimal_val == 0):
+            return BinaryNumber(0)
+        elif (x.decimal_val == 1) and (y.decimal_val == 1):
+            return BinaryNumber(1)
+        else:
+            Product1 = _quadratic_multiply(x_left, y_left)
+            Product1 = bit_shift(Product1, len(x_vec))
+            Product2 = _quadratic_multiply(x_left, y_right)
+            Product2 = bit_shift(Product2, len(x_vec)//2)
+            Product3 = _quadratic_multiply(x_right, y_left)
+            Product3 = bit_shift(Product3, len(x_vec)//2)
+            Product4 = _quadratic_multiply(x_right, y_right)
+            return BinaryNumber(Product1.decimal_val + Product2.decimal_val + Product3.decimal_val + Product4.decimal_val)
+
+    print(_quadratic_multiply(BinaryNumber(7), BinaryNumber(3)))
+
+
+
+
+
 
 
     
